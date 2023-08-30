@@ -43,6 +43,18 @@ pip install matplotlib
 pip install test-tube
 pip install wandb
 ```
+Option 3 (WSL2 or Ubuntu): 
+```
+conda create --name langseg python=3.11
+conda activate langseg
+sudo apt install nvidia-cuda-toolkit
+sudo apt install g++
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+pip install pytorch-lightning opencv-python imageio ftfy regex tqdm altair streamlit timm tensorboardX matplotlib test-tube wandb ipython ninja
+pip install git+https://github.com/openai/CLIP.git
+pip install git+https://github.com/zhanghang1989/PyTorch-Encoding/
+# Following the instruction to install PyTorch-Encoding https://hangzhang.org/PyTorch-Encoding/notes/compile.html
+```
 
 ### Data Preparation
 By default, for training, testing and demo, we use [ADE20k](https://groups.csail.mit.edu/vision/datasets/ADE20K/).
@@ -81,6 +93,8 @@ Note: for demo, if you want to use random inputs, you can ignore data loading an
 Download the model for demo and put it under folder `checkpoints` as `checkpoints/demo_e200.ckpt`. 
 
 Then ``` streamlit run lseg_app.py ```
+or
+``` streamlit run lseg_app.py -- --weights="/mnt/g/Datasets/ADEChallengeData2016/demo_e200.ckpt" --data-path="/mnt/g/Datasets/ADEChallengeData2016/" ```
 
 #### 👉 Option 2: Jupyter Notebook
 Download the model for demo and put it under folder `checkpoints` as `checkpoints/demo_e200.ckpt`. 
