@@ -45,15 +45,25 @@ pip install wandb
 ```
 Option 3 (WSL2 or Ubuntu): 
 ```
+DO NOT INSTALL cuda through $ sudo apt install cuda 
+Uninstall any existing CUDA in your system
+conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
+# https://jrkwon.com/2022/11/22/cuda-and-cudnn-inside-a-conda-env/
+
+sudo apt-get install -y libgl1-mesa-dev
+sudo apt-get install -y libglib2.0-0
+sudo apt install g++
+
 conda create --name langseg python=3.11
 conda activate langseg
-sudo apt install nvidia-cuda-toolkit
-sudo apt install g++
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+pip install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+pip install git+https://github.com/zhanghang1989/PyTorch-Encoding/
 pip install pytorch-lightning opencv-python imageio ftfy regex tqdm altair streamlit timm tensorboardX matplotlib test-tube wandb ipython ninja
 pip install git+https://github.com/openai/CLIP.git
-pip install git+https://github.com/zhanghang1989/PyTorch-Encoding/
-# Following the instruction to install PyTorch-Encoding https://hangzhang.org/PyTorch-Encoding/notes/compile.html
+
+# Following the instruction to install PyTorch-Encoding
+# https://hangzhang.org/PyTorch-Encoding/notes/compile.html
 ```
 
 ### Data Preparation
