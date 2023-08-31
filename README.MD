@@ -48,22 +48,22 @@ Option 3 (WSL2 or Ubuntu):
 DO NOT INSTALL cuda through $ sudo apt install cuda 
 Uninstall any existing CUDA in your system
 conda install -c "nvidia/label/cuda-11.8.0" cuda-toolkit
-# https://jrkwon.com/2022/11/22/cuda-and-cudnn-inside-a-conda-env/
-
+Follow these steps to set up CUDA in WSL2
+https://jrkwon.com/2022/11/22/cuda-and-cudnn-inside-a-conda-env/
 sudo apt-get install -y libgl1-mesa-dev
 sudo apt-get install -y libglib2.0-0
 sudo apt install g++
 
 conda create --name langseg python=3.11
 conda activate langseg
-
-pip install torch==1.9.1+cu111 torchvision==0.10.1+cu111 torchaudio==0.9.1 -f https://download.pytorch.org/whl/torch_stable.html
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 pip install git+https://github.com/zhanghang1989/PyTorch-Encoding/
+# If the above doesn't work, you may follow the following instruction to install PyTorch-Encoding
+# https://hangzhang.org/PyTorch-Encoding/notes/compile.html
 pip install pytorch-lightning opencv-python imageio ftfy regex tqdm altair streamlit timm tensorboardX matplotlib test-tube wandb ipython ninja
 pip install git+https://github.com/openai/CLIP.git
 
-# Following the instruction to install PyTorch-Encoding
-# https://hangzhang.org/PyTorch-Encoding/notes/compile.html
+
 ```
 
 ### Data Preparation
@@ -103,8 +103,6 @@ Note: for demo, if you want to use random inputs, you can ignore data loading an
 Download the model for demo and put it under folder `checkpoints` as `checkpoints/demo_e200.ckpt`. 
 
 Then ``` streamlit run lseg_app.py ```
-or
-``` streamlit run lseg_app.py -- --weights="/mnt/g/Datasets/ADEChallengeData2016/demo_e200.ckpt" --data-path="/mnt/g/Datasets/ADEChallengeData2016/" ```
 
 #### 👉 Option 2: Jupyter Notebook
 Download the model for demo and put it under folder `checkpoints` as `checkpoints/demo_e200.ckpt`. 
