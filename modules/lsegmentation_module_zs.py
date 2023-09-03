@@ -144,7 +144,7 @@ class LSegmentationModuleZS(pl.LightningModule):
 
         return loss
 
-    def training_epoch_end(self, outs):
+    def on_train_epoch_end(self, outs):
         if self.global_rank == 0:
             self.train_average_meter.write_result('Training', self.current_epoch)
         self.fewshot_trn_loss = utils.mean(self.train_average_meter.loss_buf)
@@ -192,7 +192,7 @@ class LSegmentationModuleZS(pl.LightningModule):
                 self.log("fewshot_val_fb_iou", fb_iou)
 
     
-    def validation_epoch_end(self, outs):
+    def on_validation_epoch_end(self, outs):
         if self.global_rank == 0:
             self.val_average_meter.write_result('Validation', self.current_epoch)
         val_loss = utils.mean(self.val_average_meter.loss_buf)
