@@ -79,7 +79,8 @@ def get_new_mask_pallete(npimg, new_palette, out_label_flag=False, labels=None):
             patches.append(red_patch)
     return out_img, patches
 
-@st.cache(allow_output_mutation=True)
+# @st.cache(allow_output_mutation=True)
+@st.cache_resource
 def load_model():
     class Options:
         def __init__(self):

@@ -99,6 +99,9 @@ Note: for demo, if you want to use random inputs, you can ignore data loading an
   </tbody>
 </table>
 
+You may need to update this weight by:
+``` python -m pytorch_lightning.utilities.upgrade_checkpoint checkpoints/demo_e200.ckpt ```
+
 #### 👉 Option 1: Running interactive app
 Download the model for demo and put it under folder `checkpoints` as `checkpoints/demo_e200.ckpt`. 
 
