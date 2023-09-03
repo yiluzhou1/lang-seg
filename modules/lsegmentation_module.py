@@ -77,11 +77,11 @@ class LSegmentationModule(pl.LightningModule):
         train_pred, train_gt = self._filter_invalid(final_output, target)
         if train_gt.nelement() != 0:
             self.train_accuracy(train_pred, train_gt)
-        self.log("train_loss", loss)
+        self.log("train_loss", loss, sync_dist=True)
         return loss
 
-    def training_epoch_end(self, outs):
-        self.log("train_acc_epoch", self.train_accuracy.compute())
+    def on_train_epoch_end(self): #, outs
+        self.log("train_acc_epoch", self.train_accuracy.compute(), sync_dist=True)
 
     def validation_step(self, batch, batch_nb):
         img, target = batch
@@ -95,19 +95,21 @@ class LSegmentationModule(pl.LightningModule):
         valid_pred, valid_gt = self._filter_invalid(final_output, target)
         self.val_iou.update(target, final_output)
         pixAcc, iou = self.val_iou.get()
-        self.log("val_loss_step", val_loss)
-        self.log("pix_acc_step", pixAcc)
+        self.log("val_loss_step", val_loss, sync_dist=True)
+        self.log("pix_acc_step", pixAcc, sync_dist=True)
         self.log(
             "val_acc_step",
             self.val_accuracy(valid_pred, valid_gt),
+            sync_dist=True
         )
-        self.log("val_iou", iou)
+        self.log("val_iou", iou, sync_dist=True)
+        return {"val_loss_step": val_loss, "pix_acc_step": pixAcc, "val_acc_step": self.val_accuracy(valid_pred, valid_gt), "val_iou": iou}
 
-    def validation_epoch_end(self, outs):
+    def on_validation_epoch_end(self):
         pixAcc, iou = self.val_iou.get()
-        self.log("val_acc_epoch", self.val_accuracy.compute())
-        self.log("val_iou_epoch", iou)
-        self.log("pix_acc_epoch", pixAcc)
+        self.log("val_acc_epoch", self.val_accuracy.compute(), sync_dist=True)
+        self.log("val_iou_epoch", iou, sync_dist=True)
+        self.log("pix_acc_epoch", pixAcc, sync_dist=True)
 
         self.val_iou.reset()
 

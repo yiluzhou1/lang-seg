@@ -1,4 +1,4 @@
-import os
+import os, inspect
 import pathlib
 
 from glob import glob
@@ -6,6 +6,9 @@ from glob import glob
 from argparse import ArgumentParser
 import torch
 import pytorch_lightning as pl
+from pytorch_lightning.loggers import CSVLogger
+from pytorch_lightning import Trainer
+from pytorch_lightning.strategies import DDPStrategy
 import numpy as np
 import cv2
 import random
@@ -13,12 +16,13 @@ import math
 from torchvision import transforms
 
 
+
 def do_training(hparams, model_constructor):
     # instantiate model
     model = model_constructor(**vars(hparams))
     # set all sorts of training parameters
     hparams.gpus = -1
-    hparams.accelerator = "ddp"
+    hparams.strategy = DDPStrategy(find_unused_parameters=True) #"ddp"
     hparams.benchmark = True
 
     if hparams.dry_run:
@@ -33,16 +37,36 @@ def do_training(hparams, model_constructor):
 
     hparams.sync_batchnorm = True
 
-    ttlogger = pl.loggers.TestTubeLogger(
-        "checkpoints", name=hparams.exp_name, version=hparams.version
+    # ttlogger = pl.loggers.TestTubeLogger(
+    #     "checkpoints", name=hparams.exp_name, version=hparams.version
+    # )
+    csv_logger = CSVLogger(
+    save_dir="checkpoints", 
+    name=hparams.exp_name, 
+    version=hparams.version
     )
 
     hparams.callbacks = make_checkpoint_callbacks(hparams.exp_name, hparams.version)
 
     wblogger = get_wandb_logger(hparams)
-    hparams.logger = [wblogger, ttlogger]
+    hparams.logger = [wblogger, csv_logger]
 
-    trainer = pl.Trainer.from_argparse_args(hparams)
+    # trainer = pl.Trainer.from_argparse_args(hparams)
+    trainer_args = vars(hparams)
+    # Extract the set of accepted arguments from the Trainer's signature
+    accepted_args = set(inspect.signature(Trainer).parameters.keys())
+
+    # Extract the set of keys from trainer_args
+    provided_args = set(trainer_args.keys())
+
+    # Find unexpected keywords
+    unexpected_args = provided_args - accepted_args
+
+    # Remove unexpected keywords from trainer_args
+    for arg in unexpected_args:
+        trainer_args.pop(arg, None)
+
+    trainer = pl.Trainer(**trainer_args)
     trainer.fit(model)
     
 

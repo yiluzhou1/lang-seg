@@ -39,12 +39,14 @@ imageio==2.31.2
 importlib-metadata @ file:///home/conda/feedstock_root/build_artifacts/importlib-metadata_1688754491823/work
 ipykernel @ file:///home/conda/feedstock_root/build_artifacts/ipykernel_1691424382338/work
 ipython @ file:///home/conda/feedstock_root/build_artifacts/ipython_1685727741709/work
+ipywidgets==8.1.0
 jedi @ file:///home/conda/feedstock_root/build_artifacts/jedi_1690896916983/work
 Jinja2==3.1.2
 jsonschema==4.19.0
 jsonschema-specifications==2023.7.1
 jupyter_client @ file:///home/conda/feedstock_root/build_artifacts/jupyter_client_1693317508789/work
 jupyter_core @ file:///home/conda/feedstock_root/build_artifacts/jupyter_core_1686775603054/work
+jupyterlab-widgets==3.0.8
 kiwisolver==1.4.5
 lightning-utilities==0.9.0
 lit==15.0.7
@@ -132,5 +134,6 @@ wandb==0.15.9
 watchdog==3.0.0
 wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1673864653149/work
 Werkzeug==2.3.7
+widgetsnbextension==4.0.8
 yarl==1.9.2
 zipp @ file:///home/conda/feedstock_root/build_artifacts/zipp_1689374466814/work
