@@ -269,7 +269,7 @@ def load_model():
     args.widehead = True
     args.dataset = 'ade20k'
     args.backbone = 'clip_vitl16_384'
-    args.weights = 'checkpoints/demo_e200.ckpt'
+    args.weights = '/mnt/eds_share/Users/yilu.zhou/Development/lang-seg/checkpoints/lseg_ade20k_l16/version_0/checkpoints/last.ckpt'
     args.ignore_index = 255
 
     module = LSegModule.load_from_checkpoint(
@@ -345,7 +345,7 @@ input_labels = st.text_input("Input labels", value="dog, grass, other")
 st.write("The labels are", input_labels)
 
 if uploaded_file is not None:
-    image = Image.open(uploaded_file)
+    image = Image.open(uploaded_file).convert('RGB')
     pimage = lseg_transform(np.array(image)).unsqueeze(0)
 
     labels = []
